@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tree Troopers • Developer Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- PRELOADER (ONLY ONCE) -->
+  <div id="preloader" aria-label="Loading">
+    <div class="loader-card">
+      <div class="tree">
+        <span class="leaf l1"></span>
+        <span class="leaf l2"></span>
+        <span class="leaf l3"></span>
+        <span class="trunk"></span>
+        <span class="ground"></span>
+      </div>
+
+      <h2 class="loader-title">Tree Troopers</h2>
+      <p class="loader-sub">Loading Developer Mode…</p>
+
+      <div class="progress">
+        <div class="bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE -->
+  <header class="topbar">
+    <div class="brand">
+      <img id="siteLogo" src="assets/logo.png" alt="Tree Troopers" />
+      <div class="brand-text">
+        <div class="brand-name">Tree Troopers</div>
+        <div class="brand-tag">Developer • Login</div>
+      </div>
+    </div>
+
+    <!-- Hamburger Button for Mobile -->
+    <button class="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
+
+    <!-- Navigation Links -->
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="members.html">Members</a>
+    </nav>
+  </header>
+
+  <main class="container" style="min-height: calc(100vh - 90px); display:grid; place-items:center;">
+    <div class="card" style="width:min(520px, 92vw); padding:22px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+        <div style="font-size:28px;">🔒</div>
+        <div>
+          <h2 style="margin:0;">Developer Login</h2>
+          <p style="margin:6px 0 0; color: rgba(255,255,255,0.75); line-height:1.5;">
+            Enter the developer password to enable editing tools.
+          </p>
+        </div>
+      </div>
+
+      <div class="form" style="margin-top:14px;">
+        <div class="form-row" style="grid-template-columns: 1fr;">
+          <input
+            type="password"
+            id="password"
+            placeholder="Developer password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <button class="btn primary" type="button" onclick="login()">Login</button>
+          <a class="btn" href="index.html">Back to Home</a>
+        </div>
+
+        <p id="loginHint" class="form-note" style="margin-top:12px;">
+          Tip: After login, click <b>Edit</b> in the Developer toolbar.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" style="width:min(1100px, 92vw); margin: 0 auto; padding-bottom:24px;">
+    <div>© <span id="year"></span> Tree Troopers Club</div>
+    <div class="footer-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#activities">Activities</a>
+    </div>
+  </footer>
+
+  <!-- PRELOADER SCRIPT -->
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const preloader = document.getElementById("preloader");
+    const bar = document.getElementById("progressBar");
+
+    let p = 0;
+    const timer = setInterval(() => {
+      const inc = Math.random() * 8 + 3;
+      p = Math.min(p + inc, 90);
+      if (bar) bar.style.width = p.toFixed(0) + "%";
+    }, 120);
+
+    window.addEventListener("load", () => {
+      clearInterval(timer);
+      if (bar) bar.style.width = "100%";
+      setTimeout(() => preloader?.classList.add("hide"), 450);
+    });
+  </script>
+
+  <!-- LOGIN SCRIPT -->
+  <script>
+    const correctPassword = "troopers2026";
+
+    function login() {
+      const input = document.getElementById("password").value;
+
+      if (input === correctPassword) {
+        localStorage.setItem("devLoggedIn", "true");
+        localStorage.setItem("devLoginTime", String(Date.now()));
+        window.location.href = "index.html";
+      } else {
+        alert("Wrong password");
+      }
+    }
+
+    // Press Enter to login
+    document.getElementById("password")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") login();
+    });
+
+    // Toggle Hamburger Menu
+    const hamburgerButton = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav");
+
+    hamburgerButton.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+    });
+  </script>
+</body>
+</html>

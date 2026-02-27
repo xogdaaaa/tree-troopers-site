@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tree Troopers • Gallery</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader" aria-label="Loading">
+    <div class="loader-card">
+      <div class="tree">
+        <span class="leaf l1"></span>
+        <span class="leaf l2"></span>
+        <span class="leaf l3"></span>
+        <span class="trunk"></span>
+        <span class="ground"></span>
+      </div>
+
+      <h2 class="loader-title">Tree Troopers</h2>
+      <p class="loader-sub">Growing a greener future…</p>
+
+      <div class="progress">
+        <div class="bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loader" class="loader">
+    <div class="loader-center">
+      <img class="logo" src="assets/logo.png" alt="Tree Troopers Club Logo" />
+      <div class="loading-text">Tree Troopers Club</div>
+      <div class="loading-sub">Loading...</div>
+      <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+    <div class="panel panel-left"></div>
+    <div class="panel panel-right"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <img id="siteLogo" data-img="logo" src="assets/logo.png" alt="Tree Troopers Club" />
+      <div class="brand-text">
+        <div class="brand-name" data-edit="brandName">Tree Troopers</div>
+        <div class="brand-tag" data-edit="brandTag">Eco Club • Founded 2016</div>
+      </div>
+    </div>
+
+    <!-- Hamburger Button for Mobile -->
+    <button class="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
+
+    <!-- Navigation Links -->
+    <nav class="nav">
+      <a href="index.html#impact">Impact</a>
+      <a href="index.html#about" data-edit="navAbout">About</a>
+      <a href="index.html#activities" data-edit="navActivities">Activities</a>
+      <a href="index.html#join">Join</a>
+
+      <a href="gallery.html">Gallery</a>
+      <a href="members.html">Members</a>
+
+      <a class="dev-link" href="admin.html" data-edit="navDeveloper">Developer</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="gallery" class="section">
+      <div class="section-head">
+        <h2 data-edit="galleryTitle">Photo Gallery</h2>
+        <p data-edit="galleryIntro">
+          Moments from beach cleanups, field trips, youth summits, and meetings.
+        </p>
+      </div>
+
+      <div id="beforeAfterWrap"></div>
+      <div id="galleryGrid" class="gallery-grid"></div>
+    </section>
+
+    <footer class="footer">
+      <div data-edit="footerLeft">© <span id="year"></span> Tree Troopers Club</div>
+      <div class="footer-links">
+        <a href="index.html#about" data-edit="footerAbout">About</a>
+        <a href="index.html#activities" data-edit="footerActivities">Activities</a>
+        <a href="members.html" data-edit="footerMembers">Members</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- DEV TOOLBAR -->
+  <div id="devToolbar" class="dev-toolbar hidden" aria-hidden="true">
+    <div class="dev-title">Developer Mode</div>
+
+    <div class="dev-actions">
+      <button id="devEditBtn" class="dev-btn">Edit</button>
+      <button id="devSaveBtn" class="dev-btn primary" disabled>Save</button>
+      <button id="devCancelBtn" class="dev-btn" disabled>Cancel</button>
+      <button id="devLogoutBtn" class="dev-btn danger">Logout</button>
+    </div>
+
+    <button id="manageEventsBtn" class="dev-btn" disabled>Manage Events</button>
+    <button id="addOfficerBtn" class="dev-btn" disabled>+ Officer</button>
+
+    <div class="dev-actions" style="margin-top:10px;">
+      <button id="addActivityBtn" class="dev-btn" disabled>+ Activity</button>
+      <button id="addMemberBtn" class="dev-btn" disabled>+ Member</button>
+      <button id="addPhotoBtn" class="dev-btn" disabled>+ Photo</button>
+      <button id="editBeforeAfterBtn" class="dev-btn" disabled>Before/After</button>
+      <button id="themeBtn" class="dev-btn" disabled>Theme</button>
+    </div>
+  </div>
+
+  <!-- file inputs -->
+  <input id="imagePicker" type="file" accept="image/*" style="display:none;" />
+  <input id="galleryPicker" type="file" accept="image/*" style="display:none;" />
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox hidden" aria-hidden="true">
+    <div class="lightbox-backdrop" data-close="true"></div>
+
+    <div class="lightbox-panel" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next">›</button>
+
+      <img id="lightboxImg" alt="Gallery photo" />
+      <div class="lightbox-meta">
+        <div id="lightboxTitle" class="lightbox-title"></div>
+        <div id="lightboxTag" class="lightbox-tag"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    // PRELOADER + Progress simulation
+    const preloader = document.getElementById('preloader');
+    const bar = document.getElementById('progressBar');
+
+    let p = 0;
+    const timer = setInterval(() => {
+      const inc = Math.random() * 8 + 3;
+      p = Math.min(p + inc, 90);
+      bar.style.width = p.toFixed(0) + '%';
+    }, 120);
+
+    window.addEventListener('load', () => {
+      clearInterval(timer);
+      bar.style.width = '100%';
+
+      setTimeout(() => {
+        preloader.classList.add('hide');
+        document.body.classList.add('site-loaded');
+
+        document.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(() => el.classList.add('show'), 60 + i * 90);
+        });
+      }, 450);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.classList.add('show');
+      });
+    }, { threshold: 0.18 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+
+    // Hamburger Menu Functionality
+    const hamburgerButton = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav");
+
+    hamburgerButton.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tree Troopers Club</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader" aria-label="Loading">
+    <div class="loader-card">
+      <div class="tree">
+        <span class="leaf l1"></span>
+        <span class="leaf l2"></span>
+        <span class="leaf l3"></span>
+        <span class="trunk"></span>
+        <span class="ground"></span>
+      </div>
+
+      <h2 class="loader-title">Tree Troopers</h2>
+      <p class="loader-sub">Growing a greener future…</p>
+
+      <div class="progress">
+        <div class="bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // PRELOADER + Progress simulation
+    const preloader = document.getElementById('preloader');
+    const bar = document.getElementById('progressBar');
+
+    let p = 0;
+    const timer = setInterval(() => {
+      const inc = Math.random() * 8 + 3;
+      p = Math.min(p + inc, 90);
+      bar.style.width = p.toFixed(0) + '%';
+    }, 120);
+
+    window.addEventListener('load', () => {
+      clearInterval(timer);
+      bar.style.width = '100%';
+
+      setTimeout(() => {
+        preloader.classList.add('hide');
+        document.body.classList.add('site-loaded');
+
+        // Trigger initial reveals
+        document.querySelectorAll('.reveal').forEach((el, i) => {
+          setTimeout(() => el.classList.add('show'), 60 + i * 90);
+        });
+      }, 450);
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.classList.add('show');
+      });
+    }, { threshold: 0.18 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  </script>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loader" class="loader">
+    <div class="loader-center">
+      <img class="logo" src="assets/logo.png" alt="Tree Troopers Club Logo" />
+      <div class="loading-text">Tree Troopers Club</div>
+      <div class="loading-sub">Loading...</div>
+      <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="panel panel-left"></div>
+    <div class="panel panel-right"></div>
+  </div>
+
+  <!-- PAGE -->
+  <header class="topbar">
+    <div class="brand">
+      <img id="siteLogo" data-img="logo" src="assets/logo.png" alt="Tree Troopers Club" />
+      <div class="brand-text">
+        <div class="brand-name" data-edit="brandName">Tree Troopers</div>
+        <div class="brand-tag" data-edit="brandTag">Eco Club • Founded 2016</div>
+      </div>
+    </div>
+
+    <!-- Hamburger Button (mobile only via CSS) -->
+    <button class="hamburger" type="button" aria-label="Open menu" aria-expanded="false">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
+
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#impact">Impact</a>
+      <a href="#about" data-edit="navAbout">About</a>
+      <a href="#activities" data-edit="navActivities">Activities</a>
+      <a href="#events">Events</a>
+      <a href="#join">Join</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="members.html">Members</a>
+      <a class="dev-link" href="admin.html" data-edit="navDeveloper">Developer</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <section class="hero hero-photo">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <h1 data-edit="heroTitle">Tree Troopers Eco Club</h1>
+
+        <p id="clubDescription" data-edit="heroDescription">
+          Tree Troopers is a student eco-club founded in 2016. We protect the environment through hands-on action like beach cleanups, recycling projects, and field trips with Generation Earth. Meetings are every other Wednesday.
+        </p>
+
+        <div class="hero-buttons">
+          <a class="btn primary" href="#activities" data-edit="heroBtn1">Explore Activities</a>
+          <a class="btn" href="#join" data-edit="heroBtn2">Join Us</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num" data-edit="stat1Num">2016</div>
+            <div class="stat-label" data-edit="stat1Label">Founded</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-edit="stat2Num">Biweekly</div>
+            <div class="stat-label" data-edit="stat2Label">Meetings</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-edit="stat3Num">Top 35</div>
+            <div class="stat-label" data-edit="stat3Label">Field Trip Invite</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACT -->
+    <section id="impact" class="section">
+      <div class="section-head">
+        <h2 data-edit="impactTitle">Our Impact</h2>
+        <p data-edit="impactIntro">
+          Real numbers that show what Tree Troopers has done for our community and the environment.
+        </p>
+      </div>
+
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-icon">🌊</div>
+          <div class="impact-num">
+            <span class="counter" data-target="332" data-suffix=" lbs">0</span>
+          </div>
+          <div class="impact-label" data-edit="impact1Label">Trash Collected</div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">♻️</div>
+          <div class="impact-num">
+            <span class="counter" data-target="17558" data-suffix="">0</span>
+          </div>
+          <div class="impact-label" data-edit="impact2Label">Items Recycled</div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">🌍</div>
+          <div class="impact-num">
+            <span class="counter" data-target="7" data-suffix="">0</span>
+          </div>
+          <div class="impact-label" data-edit="impact3Label">Beach Cleanups</div>
+        </div>
+
+        <div class="impact-card">
+          <div class="impact-icon">👥</div>
+          <div class="impact-num">
+            <span class="counter" data-target="46" data-suffix="">0</span>
+          </div>
+          <div class="impact-label" data-edit="impact4Label">Active Members</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <div class="section-head">
+        <h2 data-edit="aboutTitle">About</h2>
+        <p data-edit="aboutIntro">
+          By joining Tree Troopers, students build climate literacy, practice environmental stewardship,
+          and participate in real community service through indoor/outdoor learning and conservation work.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3 data-edit="missionTitle">Our Mission</h3>
+          <p data-edit="missionDesc">Help the environment through action, education, and community service.</p>
+          <ul class="bullets">
+            <li data-edit="missionBullet1">Hands-on learning</li>
+            <li data-edit="missionBullet2">Eco community service</li>
+            <li data-edit="missionBullet3">Conservation + leadership</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 data-edit="differentTitle">What Makes Us Different</h3>
+          <p data-edit="differentDesc">We don’t just talk — we go out and do the work.</p>
+          <ul class="bullets">
+            <li data-edit="differentBullet1">Beach cleanups (Santa Monica)</li>
+            <li data-edit="differentBullet2">Recycling projects on campus</li>
+            <li data-edit="differentBullet3">Generation Earth field trips</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ RESTORED: ACTIVITIES -->
+    <section id="activities" class="section">
+      <div class="section-head">
+        <h2 data-edit="activitiesTitle">Activities</h2>
+        <p data-edit="activitiesIntro">Real events, real impact. Here’s what we do throughout the semester.</p>
+      </div>
+      <div id="activitiesList" class="cards"></div>
+    </section>
+
+    <!-- ✅ RESTORED: EVENTS -->
+    <section id="events" class="section">
+      <div class="section-head">
+        <h2 data-edit="eventsTitle">Upcoming Events</h2>
+        <p data-edit="eventsIntro">Don’t miss what’s next — join us and make an impact.</p>
+      </div>
+
+      <div class="events-wrap">
+        <div class="card events-countdown">
+          <div class="events-kicker">Next Event In</div>
+          <div id="countdownTitle" class="events-next-title">—</div>
+
+          <div class="countdown-grid" aria-label="Countdown">
+            <div class="count-box">
+              <div id="cdDays" class="count-num">0</div>
+              <div class="count-label">Days</div>
+            </div>
+            <div class="count-box">
+              <div id="cdHours" class="count-num">0</div>
+              <div class="count-label">Hours</div>
+            </div>
+            <div class="count-box">
+              <div id="cdMins" class="count-num">0</div>
+              <div class="count-label">Minutes</div>
+            </div>
+            <div class="count-box">
+              <div id="cdSecs" class="count-num">0</div>
+              <div class="count-label">Seconds</div>
+            </div>
+          </div>
+
+          <div id="countdownDate" class="events-date">—</div>
+        </div>
+
+        <div id="eventsList" class="events-list"></div>
+      </div>
+    </section>
+
+    <!-- ✅ RESTORED: JOIN -->
+    <section id="join" class="section">
+      <div class="section-head">
+        <h2 data-edit="joinTitle">Join Tree Troopers</h2>
+        <p data-edit="joinIntro">
+          Join Tree Troopers — we use the Remind app for updates, meetings, and events.
+          Click below to join our official Remind group.
+        </p>
+      </div>
+
+      <div class="form" style="text-align:center;">
+        <a
+          href="https://www.remind.com/join/treetr"
+          target="_blank"
+          class="btn primary"
+          data-edit="joinBtn"
+          style="font-size:16px; padding:14px 20px;"
+        >
+          Join Tree Troopers on Remind
+        </a>
+
+        <p class="form-note" data-edit="joinNote">
+          Meetings every other Wednesday.
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div data-edit="footerLeft">© <span id="year"></span> Tree Troopers Club</div>
+      <div class="footer-links">
+        <a href="#about" data-edit="footerAbout">About</a>
+        <a href="#activities" data-edit="footerActivities">Activities</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- DEV TOOLBAR (only shows when logged in) -->
+  <div id="devToolbar" class="dev-toolbar hidden" aria-hidden="true">
+    <div class="dev-title">Developer Mode</div>
+
+    <div class="dev-actions">
+      <button id="devEditBtn" class="dev-btn">Edit</button>
+      <button id="devSaveBtn" class="dev-btn primary" disabled>Save</button>
+      <button id="devCancelBtn" class="dev-btn" disabled>Cancel</button>
+      <button id="devLogoutBtn" class="dev-btn danger">Logout</button>
+    </div>
+
+    <div class="dev-actions" style="margin-top:10px;">
+      <button id="addActivityBtn" class="dev-btn" disabled>+ Activity</button>
+      <button id="addEventBtn" class="dev-btn" disabled>+ Event</button>
+      <button id="manageEventsBtn" class="dev-btn" disabled>Manage Events</button>
+
+      <button id="addMemberBtn" class="dev-btn" disabled>+ Member</button>
+      <button id="addPhotoBtn" class="dev-btn" disabled>+ Photo</button>
+      <button id="editBeforeAfterBtn" class="dev-btn" disabled>Before/After</button>
+      <button id="themeBtn" class="dev-btn" disabled>Theme</button>
+    </div>
+  </div>
+
+  <input id="imagePicker" type="file" accept="image/*" style="display:none;" />
+  <input id="galleryPicker" type="file" accept="image/*" style="display:none;" />
+
+  <!-- DEV PANEL: Events Manager -->
+  <div id="devPanel" class="dev-panel hidden" aria-hidden="true">
+    <div class="dev-panel-backdrop"></div>
+
+    <div class="dev-panel-card" role="dialog" aria-modal="true">
+      <div class="dev-panel-head">
+        <div class="dev-panel-title">Manage Events</div>
+        <button id="devPanelClose" class="dev-btn danger" type="button">Close</button>
+      </div>
+
+      <div class="dev-panel-body">
+        <div class="dev-panel-row">
+          <button id="devAddEventQuick" class="dev-btn primary" type="button">+ Add Event</button>
+          <button id="devSortEvents" class="dev-btn" type="button">Sort by Date</button>
+        </div>
+
+        <div id="devEventsEditor" class="dev-events-editor"></div>
+
+        <div class="dev-panel-row" style="margin-top:12px;">
+          <button id="devEventsSave" class="dev-btn primary" type="button">Save Events</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+  <!-- Hamburger Menu Functionality -->
+  <script>
+    const hamburgerButton = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav");
+
+    function setExpanded(state) {
+      hamburgerButton.setAttribute("aria-expanded", state ? "true" : "false");
+    }
+
+    hamburgerButton.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+      setExpanded(navMenu.classList.contains("active"));
+    });
+
+    // Close menu when a link is tapped (mobile)
+    navMenu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => {
+        navMenu.classList.remove("active");
+        setExpanded(false);
+      });
+    });
+  </script>
+
+</body>
+</html>
