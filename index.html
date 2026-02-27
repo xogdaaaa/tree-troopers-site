@@ -359,8 +359,9 @@
 
   <script src="script.js"></script>
 
-  <!-- Hamburger Menu Functionality -->
+  <!-- ✅ NEW: Load Events from Database + Countdown -->
   <script>
+    // --- Hamburger Menu Functionality ---
     const hamburgerButton = document.querySelector(".hamburger");
     const navMenu = document.querySelector(".nav");
 
@@ -379,6 +380,148 @@
         navMenu.classList.remove("active");
         setExpanded(false);
       });
+    });
+
+    // --- Events from DB ---
+    let countdownTimer = null;
+
+    function parseEventDate(val) {
+      // Accepts "2026-03-10" or ISO strings; returns Date or null
+      if (!val) return null;
+      const d = new Date(val);
+      if (!isNaN(d.getTime())) return d;
+
+      // Fallback for "YYYY-MM-DD" (some browsers treat it as UTC; this keeps it simple)
+      const m = String(val).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+      return null;
+    }
+
+    function formatNiceDate(d) {
+      try {
+        return d.toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+      } catch {
+        return d.toDateString();
+      }
+    }
+
+    function setCountdownTo(nextEvent) {
+      const titleEl = document.getElementById("countdownTitle");
+      const dateEl = document.getElementById("countdownDate");
+
+      const daysEl = document.getElementById("cdDays");
+      const hoursEl = document.getElementById("cdHours");
+      const minsEl = document.getElementById("cdMins");
+      const secsEl = document.getElementById("cdSecs");
+
+      if (!nextEvent) {
+        titleEl.textContent = "No upcoming events";
+        dateEl.textContent = "—";
+        daysEl.textContent = "0";
+        hoursEl.textContent = "0";
+        minsEl.textContent = "0";
+        secsEl.textContent = "0";
+        if (countdownTimer) clearInterval(countdownTimer);
+        countdownTimer = null;
+        return;
+      }
+
+      const d = parseEventDate(nextEvent.event_date);
+      titleEl.textContent = nextEvent.title || "Upcoming Event";
+      dateEl.textContent = d ? formatNiceDate(d) : (nextEvent.event_date || "—");
+
+      if (countdownTimer) clearInterval(countdownTimer);
+
+      function tick() {
+        const now = new Date();
+        const target = d ? d.getTime() : NaN;
+
+        if (!d || isNaN(target)) {
+          daysEl.textContent = "—";
+          hoursEl.textContent = "—";
+          minsEl.textContent = "—";
+          secsEl.textContent = "—";
+          return;
+        }
+
+        let diff = target - now.getTime();
+        if (diff < 0) diff = 0;
+
+        const sec = Math.floor(diff / 1000);
+        const days = Math.floor(sec / 86400);
+        const hours = Math.floor((sec % 86400) / 3600);
+        const mins = Math.floor((sec % 3600) / 60);
+        const secs = sec % 60;
+
+        daysEl.textContent = String(days);
+        hoursEl.textContent = String(hours);
+        minsEl.textContent = String(mins);
+        secsEl.textContent = String(secs);
+      }
+
+      tick();
+      countdownTimer = setInterval(tick, 1000);
+    }
+
+    async function loadEvents() {
+      const list = document.getElementById("eventsList");
+      if (!list) return;
+
+      list.innerHTML = `<div class="event-card"><p>Loading events…</p></div>`;
+
+      try {
+        const res = await fetch("/.netlify/functions/events-get", { cache: "no-store" });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+
+        const data = await res.json();
+        const events = Array.isArray(data.events) ? data.events : [];
+
+        list.innerHTML = "";
+
+        if (events.length === 0) {
+          list.innerHTML = `<div class="event-card"><p>No events yet. Check back soon!</p></div>`;
+          setCountdownTo(null);
+          return;
+        }
+
+        // Sort by event_date ascending (best effort)
+        events.sort((a, b) => {
+          const da = parseEventDate(a.event_date)?.getTime() ?? Infinity;
+          const db = parseEventDate(b.event_date)?.getTime() ?? Infinity;
+          return da - db;
+        });
+
+        // Render cards
+        events.forEach(ev => {
+          const div = document.createElement("div");
+          div.className = "event-card";
+          div.innerHTML = `
+            <h3>${ev.title ?? "Untitled Event"}</h3>
+            <p><b>Date:</b> ${ev.event_date ?? "TBA"}</p>
+            ${ev.location ? `<p><b>Location:</b> ${ev.location}</p>` : ""}
+            ${ev.description ? `<p>${ev.description}</p>` : ""}
+          `;
+          list.appendChild(div);
+        });
+
+        // Pick the next upcoming event for countdown (first event with date >= now)
+        const now = new Date().getTime();
+        const next = events.find(ev => {
+          const t = parseEventDate(ev.event_date)?.getTime();
+          return typeof t === "number" && !isNaN(t) && t >= now;
+        }) || events[0];
+
+        setCountdownTo(next);
+
+      } catch (err) {
+        console.error("loadEvents error:", err);
+        list.innerHTML = `<div class="event-card"><p>Couldn’t load events right now.</p></div>`;
+        setCountdownTo(null);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadEvents();
     });
   </script>
 

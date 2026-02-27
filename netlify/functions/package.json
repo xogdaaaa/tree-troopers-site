@@ -1,0 +1,7 @@
+{
+  "name": "tree-troopers-site",
+  "private": true,
+  "dependencies": {
+    "@netlify/neon": "^1.0.0"
+  }
+}
