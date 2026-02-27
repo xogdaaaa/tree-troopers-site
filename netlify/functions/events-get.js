@@ -1,24 +1,23 @@
-import { neon } from "@netlify/neon";
+const { neon } = require("@netlify/neon");
 
-export default async (request) => {
+exports.handler = async () => {
   try {
-    const body = await request.json();
-    const { title, event_date, location = "", description = "" } = body;
-
-    if (!title || !event_date) {
-      return new Response(JSON.stringify({ error: "Missing title or event_date" }), { status: 400 });
-    }
-
     const sql = neon();
-
-    const [row] = await sql`
-      INSERT INTO events (title, event_date, location, description)
-      VALUES (${title}, ${event_date}, ${location}, ${description})
-      RETURNING id, title, event_date, location, description;
+    const events = await sql`
+      SELECT id, title, event_date, location, description
+      FROM events
+      ORDER BY id DESC;
     `;
 
-    return Response.json({ event: row });
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ events }),
+    };
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: String(err) }),
+    };
   }
 };
